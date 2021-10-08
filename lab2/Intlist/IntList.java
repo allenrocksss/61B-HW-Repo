@@ -29,7 +29,7 @@ public class IntList {
      * A List with null rest, and first = 0.
      */
     public IntList() {
-    /* NOTE: public IntList () { }  would also work. */
+        /* NOTE: public IntList () { }  would also work. */
         this(0, null);
     }
 
@@ -105,22 +105,55 @@ public class IntList {
     /** DO NOT MODIFY ANYTHING ABOVE THIS LINE! */
 
 
+    /** 4 Destructive, iterative
+     * Returns a list consisting of the elements of A followed by the
+     * *  elements of B.  May modify items of A. Don't use 'new'.
+     */
+    //⚠️ NEED to comment out dcatenateIter or dcateateRecur then test!
+    public static IntList dcatenateIter(IntList A, IntList B) {
+        IntList ptr = A;
+        while (ptr.rest!=null) {
+            ptr = ptr.rest;
+        }
+        ptr.rest = B;
+        return A;
+    }
     /** Destructive, recursive */
-    public static IntList dcatenate(IntList A, IntList B) {
+    public static IntList dcatenateRecur(IntList A, IntList B) {
         if (A.rest == null) {
             A.rest = B;
             return A; //run this in java visualizer
         }
-        dcatenate(A.rest, B);
+        dcatenateRecur(A.rest, B);
         return A;
     }
 
+
+    /** 5 Non-destructive, iterative
+     * Returns a list consisting of the elements of A followed by the
+     * * elements of B.  May NOT modify items of A.  Use 'new'.
+     */
+    public static IntList catenateIter(IntList A, IntList B) {
+        if (A == null) {
+            return null;
+        }
+        IntList res = new IntList(A.first, null);
+        IntList ptr = res;
+        while (A.rest != null) {
+            A = A.rest; 
+            ptr.rest = new IntList(A.first, null);
+            ptr = ptr.rest;
+        }
+        ptr.rest = B;
+        return res;
+
+    }
     /** Non-destructive, recursive */
-    public static IntList catenate(IntList A, IntList B) {
+    public static IntList catenateRecur(IntList A, IntList B) {
         if (A == null) {
             return B;
         }
-        return new IntList(A.first, catenate(A.rest, B));
+        return new IntList(A.first, catenateRecur(A.rest, B));
 
     }
 
