@@ -148,22 +148,22 @@ public class LinkedListDeque<T> {
      * make sure the index must be less than the size
      * Since the deque is a circular queue, if there is no condition, it will go to the first
      * element again, and I never know which element I am looking for */
-    public T getRecur(int index) {
+    public T getRecursive(int index) {
         if (size <= index) {
             return null;
         }
-        return getRecur(sentinel.nextOne, index);
+        return getRecursive(sentinel.nextOne, index);
                 //sentinel.nextOne.getRecurHelper(index);
     }
 
     /** Helper method
      * It is private
      * It is a static method */
-    public T getRecur(StuffNode x, int i) {
+    public T getRecursive(StuffNode x, int i) {
         if (i == 0) {
             return x.theItem;
         }
-        return getRecur(x.nextOne, i - 1);
+        return getRecursive(x.nextOne, i - 1);
     }
 
 }
