@@ -40,14 +40,14 @@ public class LinkedListDeque<T> {
     /** Constructor#3: Make a DEEP COPY of other instance of LinkedListDeque
      * ⚠️The key point is to downgrade the reference variables to primitive variables so
      * I can copy the value without affecting the other instance */
-    public LinkedListDeque(LinkedListDeque other) {
+    public LinkedListDeque(LinkedListDeque<T> other) {
         //1. create an empty deque
         sentinel = new StuffNode(null, null, null);
         size = 0;
         //2. Loop through every StuffNode in the other. Then retrieve item from each StuffNode.
         //---> Since each item is primitive variable, I can simply copy the value without affecting the other instance
         for (int i = 0; i < other.size; i++) {
-            addLast((T) other.get(i)); //The item get() returns is primitive value, so don't worry about overwriting the original values.
+            addLast(other.get(i)); //The item get() returns is primitive value, so don't worry about overwriting the original values.
         }
     }
 
@@ -165,45 +165,5 @@ public class LinkedListDeque<T> {
         }
         return getRecur(x.nextOne, i - 1);
     }
-
-//    Note:
-//    After finish this method, change the third constructor (use the casting version generics)
-//    Then, put the project into the autograder to see if it passes
-//    Next, see the github answers to improve my code
-
-//    public static void main(String[] args) {
-//        //1. Create two different-type LLDeque below:
-//        LinkedListDeque<Integer> L = new LinkedListDeque<>();
-//        L.addLast(0);
-//        L.addLast(1);
-//        L.addLast(2);
-//        L.addLast(3);
-//        L.addLast(4);
-//        System.out.println(L.getRecur(0));
-//        System.out.println(L.getRecur(60));
-//
-//
-////        LinkedListDeque<Integer> identicalOfL = new LinkedListDeque<>(L);
-////        System.out.println(L.get(0));
-////
-////        //2. Implement addFirst(T item) AND addLast(T item)
-////        L.addLast(5);
-////        L.addFirst(3);
-////        L.addFirst(1);
-////
-////        //3. Implement printDeque()
-////        L.printDeque();
-////
-////        //4. Implement size()
-////        System.out.println("Now, the deque size is: " + L.size());
-////
-////        //5. Implement removeFirst() AND removeLast()
-////        L.removeFirst(); //remove 1
-////        L.removeLast();  //remove 5
-////
-////        //6. Implement get(int index)
-////        System.out.println("The item at index 0 is: " + L.get(0)); // 3
-//
-//    }
 
 }
