@@ -28,29 +28,29 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-//    /** Constructor#2: Make an item-live deque */
-//    public LinkedListDeque (T item) {
-//        size += 1;
-//        sentinel = new StuffNode(null, null, null);
-//
-//        //The code below is same as the one in addLast()
-//        sentinel.prevOne.nextOne = new StuffNode(sentinel.prevOne, item, sentinel);
-//        sentinel.prevOne = sentinel.prevOne.nextOne;
-//    }
-//
-//    /** Constructor#3: Make a DEEP COPY of other instance of LinkedListDeque
-//     * ⚠️The key point is to downgrade the reference variables to primitive variables so
-//     * I can copy the value without affecting the other instance */
-//    public LinkedListDeque(LinkedListDeque<T> other) {
-//        //1. create an empty deque
-//        sentinel = new StuffNode(null, null, null);
-//        size = 0;
-//        //2. Loop through every StuffNode in the other. Then retrieve item from each StuffNode.
-//        //---> Since each item is primitive variable, I can simply copy the value without affecting the other instance
-//        for (int i = 0; i < other.size; i++) {
-//            addLast(other.get(i)); //The item get() returns is primitive value, so don't worry about overwriting the original values.
-//        }
-//    }
+    /** Constructor#2: Make an item-live deque */
+    public LinkedListDeque (T item) {
+        size += 1;
+        sentinel = new StuffNode(null, null, null);
+
+        //The code below is same as the one in addLast()
+        sentinel.prevOne.nextOne = new StuffNode(sentinel.prevOne, item, sentinel);
+        sentinel.prevOne = sentinel.prevOne.nextOne;
+    }
+
+    /** Constructor#3: Make a DEEP COPY of other instance of LinkedListDeque
+     * ⚠️The key point is to downgrade the reference variables to primitive variables so
+     * I can copy the value without affecting the other instance */
+    public LinkedListDeque(LinkedListDeque<T> other) {
+        //1. create an empty deque
+        sentinel = new StuffNode(null, null, null);
+        size = 0;
+        //2. Loop through every StuffNode in the other. Then retrieve item from each StuffNode.
+        //---> Since each item is primitive variable, I can simply copy the value without affecting the other instance
+        for (int i = 0; i < other.size; i++) {
+            addLast(other.get(i)); //The item get() returns is primitive value, so don't worry about overwriting the original values.
+        }
+    }
 
     /** New added item will be the first item in the deque */
     public void addFirst(T item) {
@@ -111,8 +111,10 @@ public class LinkedListDeque<T> {
         sentinel.nextOne = sentinel.nextOne.nextOne;
         sentinel.nextOne.prevOne = sentinel;
         return item;
-
+        //My understanding of this is: remove the first item, then return the new first item
+        //Correct understanding: remove the first item, then return the item has just been removed
     }
+
     /** Remove the last item in the deque */
     public T removeLast() {
         if (size == 0) {
@@ -126,6 +128,9 @@ public class LinkedListDeque<T> {
         return item;
     }
 
+    /** Gets the item at the given index (by iteration)
+     * Please use this method when the Deque is not empty and
+     * make sure the index must be less than the size */
     public T get(int index) {
         if (size <= index) {
             return null;
@@ -139,28 +144,28 @@ public class LinkedListDeque<T> {
         return iptr.theItem;
     }
 
-//    /** Gets the item at the given index (by recursion)
-//     * Please use this method when the Deque is not empty and
-//     * make sure the index must be less than the size
-//     * Since the deque is a circular queue, if there is no condition, it will go to the first
-//     * element again, and I never know which element I am looking for */
-//    public T getRecursive(int index) {
-//        if (size <= index) {
-//            return null;
-//        }
-//        return getRecursive(sentinel.nextOne, index);
-//                //sentinel.nextOne.getRecurHelper(index);
-//    }
-//
-//    /** Helper method
-//     * It is private
-//     * It is a static method */
-//    public T getRecursive(StuffNode x, int i) {
-//        if (i == 0) {
-//            return x.theItem;
-//        }
-//        return getRecursive(x.nextOne, i - 1);
-//    }
+    /** Gets the item at the given index (by recursion)
+     * Please use this method when the Deque is not empty and
+     * make sure the index must be less than the size
+     * Since the deque is a circular queue, if there is no condition, it will go to the first
+     * element again, and I never know which element I am looking for */
+    public T getRecursive(int index) {
+        if (size <= index) {
+            return null;
+        }
+        return getRecursive(sentinel.nextOne, index);
+                //sentinel.nextOne.getRecurHelper(index);
+    }
+
+    /** Helper method
+     * It is private
+     * It is a static method */
+    public T getRecursive(StuffNode x, int i) {
+        if (i == 0) {
+            return x.theItem;
+        }
+        return getRecursive(x.nextOne, i - 1);
+    }
 
 //    public static void main(String[] args) {
 //        LinkedListDeque<Integer> L = new LinkedListDeque<>();
