@@ -1,6 +1,6 @@
 public class LinkedListDeque<T> {
     /** Inner class */
-    public class StuffNode {
+    private class StuffNode {
         StuffNode prevOne; //The last item in the queue
         T theItem;
         StuffNode nextOne; //The first item in the queue
@@ -12,10 +12,10 @@ public class LinkedListDeque<T> {
     }
 
     /** Instance#1: A circular sentinel (sentinel is the holder of circular chain) */
-    StuffNode sentinel;
+    private StuffNode sentinel;
 
     /** Instance#2: A size recorder */
-    int size;
+    private int size;
 
     /** Constructor#1: Make an empty deque */
     public LinkedListDeque() {
@@ -167,17 +167,17 @@ public class LinkedListDeque<T> {
         return getRecursive(x.nextOne, i - 1);
     }
 
-    public static void main(String[] args) {
-        LinkedListDeque<Integer> L = new LinkedListDeque<>();
-        L.addFirst(0);
-        L.addFirst(1);
-        L.addFirst(2); //{2, 1, 0}
-//        L.removeFirst();    //{1, 0}
-        System.out.println(L.removeFirst());
-//        System.out.println(L.get(0));
-//        System.out.println(L.get(1));
-
-    }
+//    public static void main(String[] args) {
+//        LinkedListDeque<Integer> L = new LinkedListDeque<>();
+//        L.addFirst(0);
+//        L.addFirst(1);
+//        L.addFirst(2); //{2, 1, 0}
+////        L.removeFirst();    //{1, 0}
+//        System.out.println(L.removeFirst());
+////        System.out.println(L.get(0));
+////        System.out.println(L.get(1));
+//
+//    }
 
 
 }
