@@ -24,6 +24,7 @@ public class LinkedListDeque<T> {
          * next is the first item in the deque
          * */
         sentinel = new StuffNode(null, null, null);
+
         size = 0;
     }
 
@@ -82,10 +83,7 @@ public class LinkedListDeque<T> {
 
     /** Return true if the deque is empty */
     public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        }
-        return false;
+        return size == 0;
     }
 
     /** Return the number of items in the deque */
@@ -108,11 +106,13 @@ public class LinkedListDeque<T> {
         if (size == 0) {
             return null;
         }
+        T item = sentinel.nextOne.theItem;
         size -= 1;
         sentinel.nextOne = sentinel.nextOne.nextOne;
         sentinel.nextOne.prevOne = sentinel;
-        return sentinel.nextOne.theItem;
+        return item;
         //My understanding of this is: remove the first item, then return the new first item
+        //Correct understanding: remove the first item, then return the item has just been removed
     }
 
     /** Remove the last item in the deque */
@@ -120,11 +120,12 @@ public class LinkedListDeque<T> {
         if (size == 0) {
             return null;
         }
+        T item = sentinel.prevOne.theItem;
         size -= 1;
         //Cut off two '你中有我' links
         sentinel.prevOne = sentinel.prevOne.prevOne;
         sentinel.prevOne.nextOne = sentinel;
-        return sentinel.prevOne.theItem;
+        return item;
     }
 
     /** Gets the item at the given index (by iteration)
@@ -165,5 +166,18 @@ public class LinkedListDeque<T> {
         }
         return getRecursive(x.nextOne, i - 1);
     }
+
+    public static void main(String[] args) {
+        LinkedListDeque<Integer> L = new LinkedListDeque<>();
+        L.addFirst(0);
+        L.addFirst(1);
+        L.addFirst(2); //{2, 1, 0}
+//        L.removeFirst();    //{1, 0}
+        System.out.println(L.removeFirst());
+//        System.out.println(L.get(0));
+//        System.out.println(L.get(1));
+
+    }
+
 
 }
