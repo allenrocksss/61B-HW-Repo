@@ -1,7 +1,7 @@
-public class ArrayDeque<E> {
+public class ArrayDeque<T> {
 
     /** The array */
-    private E[] items;
+    private T[] items;
     /** The index position that will hold the first item */
     private int nextFirst;
     /** The index position that will hold the last item */
@@ -12,15 +12,15 @@ public class ArrayDeque<E> {
 
     /** Constructor#1: Make an empty array */
     public ArrayDeque() {
-        items = (E[]) new Object[6];
+        items = (T[]) new Object[6];
         size = 0;
         nextFirst = 3;
         nextLast = 4;
     }
 
     /** Constructor#2: Make an element-alive array */
-    public ArrayDeque(E element) {
-        items = (E[]) new Object[6];
+    public ArrayDeque(T element) {
+        items = (T[]) new Object[6];
         items[3] = element;
         size = 1;
         nextFirst = 2;
@@ -28,17 +28,17 @@ public class ArrayDeque<E> {
     }
 
     /** Constructor#3: Make a DEEP copy of an existed array deque */
-    public ArrayDeque(ArrayDeque<E> AnArrayDeque) {
+    public ArrayDeque(ArrayDeque<T> AnArrayDeque) {
         // Also, I can use arraycopy, but I use a for loop here :)
         //1. Initialize the items[] and get the size from other array - AnArrayDeque
-        items = (E[]) new Object[AnArrayDeque.size];
+        items = (T[]) new Object[AnArrayDeque.size];
         System.arraycopy(AnArrayDeque.items, 0, items, 0, AnArrayDeque.items.length);
         nextFirst = AnArrayDeque.nextFirst;
         nextLast = AnArrayDeque.nextLast;
     }
 
     /** New added item will be the last item */
-    public void addLast(E element) {
+    public void addLast(T element) {
         if (size == items.length) {
             extendArray(size * 2);
         }
@@ -58,7 +58,7 @@ public class ArrayDeque<E> {
     }
 
     /** New added item will be the first item */
-    public void addFirst(E element) {
+    public void addFirst(T element) {
         if (size == items.length) {
             extendArray(size * 2);
         }
@@ -78,7 +78,7 @@ public class ArrayDeque<E> {
     }
 
     /** Remove and return the last item */
-    public E removeLast() {
+    public T removeLast() {
         //1. See if the array is empty
         if (size == 0) {
             return null;
@@ -89,7 +89,7 @@ public class ArrayDeque<E> {
         }
         size -= 1;
         //3. Give holder the Tail. The index of last item is one step before the nextLast
-        E holder = items[nextLast - 1];
+        T holder = items[nextLast - 1];
         /*3. Cut off the relation between items[nextLast] and the value that was at nextLast.
              Now, only the local variable holder holds the old value. */
         items[nextLast - 1] = null;
@@ -99,7 +99,7 @@ public class ArrayDeque<E> {
     }
 
     /** Remove and return the first item */
-    public E removeFirst() {
+    public T removeFirst() {
         //1. See if the array is empty
         if (size == 0) {
             return null;
@@ -110,7 +110,7 @@ public class ArrayDeque<E> {
         }
         size -= 1;
         //3. Give the holder the head
-        E holder = items[nextFirst + 1];
+        T holder = items[nextFirst + 1];
         /*2. Cut off the relation between items[nextFirst] and the value that was at nextFirst.
              Now, only holder holds the old value */
         items[nextFirst + 1] = null;
@@ -133,7 +133,7 @@ public class ArrayDeque<E> {
     }
 
     /** Return the item on the given index */
-    public E get(int index) {
+    public T get(int index) {
         return items[index];
     }
 
@@ -161,7 +161,7 @@ public class ArrayDeque<E> {
 
     public void extendArray(int doubleSize) {
         //1. Make a new array that has double size of old array
-        E[] newItems = (E[]) new Object[doubleSize];
+        T[] newItems = (T[]) new Object[doubleSize];
         //2. Identify the head (No need to identify the tail)
         int head = nextFirst + 1;
         //3. Specify how many steps we need to walk from the 'head' to the end
@@ -183,7 +183,7 @@ public class ArrayDeque<E> {
 
     public void shrinkArray(int halfSize) {
         //1. Create a new array with half size
-        E[] newItems = (E[]) new Object[halfSize];
+        T[] newItems = (T[]) new Object[halfSize];
         //2. See if every element in old array is contiguous
         int head = nextFirst + 1;
         int headToTheEnd = items.length - head;
