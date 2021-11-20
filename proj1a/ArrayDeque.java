@@ -88,19 +88,12 @@ public class ArrayDeque<E> {
             shrinkArray(size / 2);
         }
         size -= 1;
-        //3. See if nextLast is at index 0 (the Tail is the last item of the array)
-        if (nextLast == 0) {
-            E holder = items[items.length - 1];
-            items[items.length - 1] = null;
-            nextLast = items.length - 1;
-            return holder;
-        }
-        //. Give holder the Tail. The index of last item is one step before the nextLast
+        //3. Give holder the Tail. The index of last item is one step before the nextLast
         E holder = items[nextLast - 1];
         /*3. Cut off the relation between items[nextLast] and the value that was at nextLast.
              Now, only the local variable holder holds the old value. */
         items[nextLast - 1] = null;
-        //. Move the nextLast one step back
+        //4. Move the nextLast one step back
         nextLast -= 1;
         return holder;
     }
@@ -116,19 +109,12 @@ public class ArrayDeque<E> {
             shrinkArray(size / 2);
         }
         size -= 1;
-        //3. See if nextFirst is at index items.length (the Head is the first item in the array)
-        if (nextFirst == items.length - 1) {
-            E holder = items[0];
-            items[0] = null;
-            nextFirst = 0;
-            return holder; //this condition stops right here!
-        }
-        //1. Give the holder the first item
+        //3. Give the holder the head
         E holder = items[nextFirst + 1];
         /*2. Cut off the relation between items[nextFirst] and the value that was at nextFirst.
              Now, only holder holds the old value */
         items[nextFirst + 1] = null;
-        //3. Move the nextFirst one step forward
+        //4. Move the nextFirst one step forward
         nextFirst += 1;
         return holder;
     }
