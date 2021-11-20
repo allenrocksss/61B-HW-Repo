@@ -12,29 +12,10 @@ public class ArrayDeque<T> {
 
     /** Constructor#1: Make an empty array */
     public ArrayDeque() {
-        items = (T[]) new Object[6];
+        items = (T[]) new Object[8];
         size = 0;
         nextFirst = 3;
         nextLast = 4;
-    }
-
-    /** Constructor#2: Make an element-alive array */
-    public ArrayDeque(T element) {
-        items = (T[]) new Object[6];
-        items[3] = element;
-        size = 1;
-        nextFirst = 2;
-        nextLast = 4;
-    }
-
-    /** Constructor#3: Make a DEEP copy of an existed array deque */
-    public ArrayDeque(ArrayDeque<T> AnArrayDeque) {
-        // Also, I can use arraycopy, but I use a for loop here :)
-        //1. Initialize the items[] and get the size from other array - AnArrayDeque
-        items = (T[]) new Object[AnArrayDeque.size];
-        System.arraycopy(AnArrayDeque.items, 0, items, 0, AnArrayDeque.items.length);
-        nextFirst = AnArrayDeque.nextFirst;
-        nextLast = AnArrayDeque.nextLast;
     }
 
     /** New added item will be the last item */
@@ -158,6 +139,8 @@ public class ArrayDeque<T> {
             }
         }
     }
+
+
 
     public void extendArray(int doubleSize) {
         //1. Make a new array that has double size of old array
