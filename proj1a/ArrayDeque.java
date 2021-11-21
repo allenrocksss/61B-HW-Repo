@@ -142,7 +142,7 @@ public class ArrayDeque<T> {
 
 
 
-    public void extendArray(int doubleSize) {
+    private void extendArray(int doubleSize) {
         //1. Make a new array that has double size of old array
         T[] newItems = (T[]) new Object[doubleSize];
         //2. Identify the head (No need to identify the tail)
@@ -164,7 +164,7 @@ public class ArrayDeque<T> {
         items = newItems;
     }
 
-    public void shrinkArray(int halfSize) {
+    private void shrinkArray(int halfSize) {
         //1. Create a new array with half size
         T[] newItems = (T[]) new Object[halfSize];
         //2. See if every element in old array is contiguous
