@@ -14,8 +14,8 @@ public class ArrayDeque<T> {
     public ArrayDeque() {
         items = (T[]) new Object[6];
         size = 0;
-        nextFirst = 3;
-        nextLast = 4;
+        nextFirst = 0;
+        nextLast = 1;
     }
 
     /** Constructor#2: Make an element-alive array */
@@ -23,8 +23,8 @@ public class ArrayDeque<T> {
         items = (T[]) new Object[6];
         items[3] = element;
         size = 1;
-        nextFirst = 2;
-        nextLast = 4;
+        nextFirst = 0;
+        nextLast = 1;
     }
 
     /** Constructor#3: Make a DEEP copy of an existed array deque */
