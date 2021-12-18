@@ -1,0 +1,48 @@
+After comparing to other's codes post on Github
+Need to improve:
+
+LinkedListDeque
+
+1. Simplify the variable names
+
+2. To see if the deque is empty
+   return size == 0;
+
+3. removeFirst()
+   How to remove the first item, then return
+   the item has just been removed?
+
+4. ⚠️ SEE here to know where I am at in the process of
+      fixing the errors shown by the auto grader
+   - Fixed the removeFirst() and removeLast()
+     add the local variables to temporarily record the item
+     has just been removed
+   - TRY to upload this fixed again to see
+     what problems are exactly left
+
+Temp put
+ /** Constructor#2: Make an item-live deque */
+    public LinkedListDeque (T item) {
+        size += 1;
+        sentinel = new StuffNode(null, null, null);
+
+        //The code below is same as the one in addLast()
+        sentinel.prevOne.nextOne = new StuffNode(sentinel.prevOne, item, sentinel);
+        sentinel.prevOne = sentinel.prevOne.nextOne;
+    }
+
+    /** Constructor#3: Make a DEEP COPY of other instance of LinkedListDeque
+     * ⚠️The key point is to downgrade the reference variables to primitive variables so
+     * I can copy the value without affecting the other instance */
+    public LinkedListDeque(LinkedListDeque<T> other) {
+        //1. create an empty deque
+        sentinel = new StuffNode(null, null, null);
+        size = 0;
+        //2. Loop through every StuffNode in the other. Then retrieve item from each StuffNode.
+        //---> Since each item is primitive variable, I can simply copy the value without affecting the other instance
+        for (int i = 0; i < other.size; i++) {
+            addLast(other.get(i)); //The item get() returns is primitive value, so don't worry about overwriting the original values.
+        }
+    }
+
+

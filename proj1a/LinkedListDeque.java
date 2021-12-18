@@ -30,6 +30,7 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
+
     /** New added item will be the first item in the deque */
     public void addFirst(T item) {
         /**If the deque is empty, the new added item's prevOne will be sentinel, its nextOne will be sentinel too
@@ -120,6 +121,19 @@ public class LinkedListDeque<T> {
             walkSteps -= 1;
         }
         return iptr.theItem;
+    }
+
+    /** Gets the item at the given index (by recursion)
+     * Please use this method when the Deque is not empty and
+     * make sure the index must be less than the size
+     * Since the deque is a circular queue, if there is no condition, it will go to the first
+     * element again, and I never know which element I am looking for */
+    public T getRecursive(int index) {
+        if (size <= index) {
+            return null;
+        }
+        return getRecursive(sentinel.nextOne, index);
+                //sentinel.nextOne.getRecurHelper(index);
     }
 
     /** Helper method
