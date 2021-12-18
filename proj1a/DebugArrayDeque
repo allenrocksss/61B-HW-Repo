@@ -1,0 +1,42 @@
+My Goal:
+Part 1: Based on the code I wrote, I find all the bugs, and fix them by writing tests.
+Part 2: When the code is bug-free, I will contrive the common pattern, and make the code more clear.
+        Even use a/some smarter ways to improve the performance.
+==============================================================================================================
+Part 1: Bug Fix
+After I running my simpleTest, I found a couple of mistakes:
+
+1.  I cannot put different types in a same calculation!
+       It should be:
+       ((double) size / items.length < 0.25)
+       I wrote:
+       (size / items.length < 0.25)
+
+2. In removeLast, nextLast could be 0 when 'head' is at items.length-1
+
+3. Wrong resizing in removeLast()
+       It should be:
+       shrinkArray(items.length / 2);
+       I wrote:
+       shrinkArray(size / 2);
+
+4. Duplicated removing actions in removeLast()
+       It should be:
+       if (nextLast == 0) {
+       ....
+       return holder;
+       }
+
+       I wrote:
+       I didn't return holder, so the following
+       steps are executed, which cause the
+       duplicated removing actions
+
+5.
+
+
+
+
+====================================================================================================
+
+

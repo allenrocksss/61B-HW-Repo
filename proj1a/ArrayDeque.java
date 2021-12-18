@@ -12,10 +12,29 @@ public class ArrayDeque<T> {
 
     /** Constructor#1: Make an empty array */
     public ArrayDeque() {
-        items = (T[]) new Object[8];
+        items = (T[]) new Object[6];
         size = 0;
         nextFirst = 3;
         nextLast = 4;
+    }
+
+    /** Constructor#2: Make an element-alive array */
+    public ArrayDeque(T element) {
+        items = (T[]) new Object[6];
+        items[3] = element;
+        size = 1;
+        nextFirst = 2;
+        nextLast = 4;
+    }
+
+    /** Constructor#3: Make a DEEP copy of an existed array deque */
+    public ArrayDeque(ArrayDeque<T> AnArrayDeque) {
+        // Also, I can use arraycopy, but I use a for loop here :)
+        //1. Initialize the items[] and get the size from other array - AnArrayDeque
+        items = (T[]) new Object[AnArrayDeque.size];
+        System.arraycopy(AnArrayDeque.items, 0, items, 0, AnArrayDeque.items.length);
+        nextFirst = AnArrayDeque.nextFirst;
+        nextLast = AnArrayDeque.nextLast;
     }
 
     /** New added item will be the last item */
@@ -29,12 +48,12 @@ public class ArrayDeque<T> {
         items[nextLast] = element;
         nextLast += 1;
         size += 1;
-         /**
+        /**
          * See if the array is full
-            * if full, call resize()
-            * then, see if addLast() reaches the rightmost end of the array
-                * if it reaches, modify the nextLast to the left most of the array
-                * them, (not reaches), simply give the element to the nextLast, and update size
+         * if full, call resize()
+         * then, see if addLast() reaches the rightmost end of the array
+         * if it reaches, modify the nextLast to the left most of the array
+         * then, (not reaches), simply give the element to the nextLast, and update size
          */
     }
 
@@ -51,10 +70,10 @@ public class ArrayDeque<T> {
         size += 1;
         /**
          * See if the array is full
-            * if full, call resize()
-            * then, see if addFirst() reaches the left most end of the array
-                * if it reaches, modify the nextFirst to the rightmost end of the array
-                * then, simply give the element to the nextFirst
+         * if full, call resize()
+         * then, see if addFirst() reaches the left most end of the array
+         * if it reaches, modify the nextFirst to the rightmost end of the array
+         * then, simply give the element to the nextFirst
          */
     }
 
@@ -65,16 +84,23 @@ public class ArrayDeque<T> {
             return null;
         }
         //2. See if (size / items.length < 0.25) "if it is under the usage ratio, shrink the array!"
-        if (size / items.length < 0.25) {
-            shrinkArray(size / 2);
+        if ((double) size / items.length < 0.25) {
+            shrinkArray(items.length / 2);
         }
+        //3. When nextLast is at 0, and 'Tail' is at the (items.length-1)
+        if (nextLast == 0) {//When Tail is at length-1
+            T holder = items[items.length - 1];
+            items[items.length - 1] = null;
+            nextLast = items.length - 1;
+            size -= 1;
+            return holder;
+        }
+        //4. When nextLast is not at 0
         size -= 1;
-        //3. Give holder the Tail. The index of last item is one step before the nextLast
         T holder = items[nextLast - 1];
         /*3. Cut off the relation between items[nextLast] and the value that was at nextLast.
              Now, only the local variable holder holds the old value. */
         items[nextLast - 1] = null;
-        //4. Move the nextLast one step back
         nextLast -= 1;
         return holder;
     }
@@ -86,16 +112,23 @@ public class ArrayDeque<T> {
             return null;
         }
         //2. See if (size / items.length < 0.25) "if it is under the usage ratio, shrink the array!"
-        if (size / items.length < 0.25) {
-            shrinkArray(size / 2);
+        if ((double) size / items.length < 0.25) {
+            shrinkArray(items.length / 2);
         }
+        //3. When nextFirst is at items.length - 1, and 'Head' is at 0
+        if (nextFirst == items.length - 1) {
+            T holder = items[0];
+            items[0] = null;
+            nextFirst = 0;
+            size -= 1;
+            return holder;
+        }
+        //4. When nextFirst is not at items.length - 1
         size -= 1;
-        //3. Give the holder the head
         T holder = items[nextFirst + 1];
         /*2. Cut off the relation between items[nextFirst] and the value that was at nextFirst.
              Now, only holder holds the old value */
         items[nextFirst + 1] = null;
-        //4. Move the nextFirst one step forward
         nextFirst += 1;
         return holder;
     }
@@ -140,9 +173,7 @@ public class ArrayDeque<T> {
         }
     }
 
-
-
-    private void extendArray(int doubleSize) {
+    public void extendArray(int doubleSize) {
         //1. Make a new array that has double size of old array
         T[] newItems = (T[]) new Object[doubleSize];
         //2. Identify the head (No need to identify the tail)
@@ -164,17 +195,17 @@ public class ArrayDeque<T> {
         items = newItems;
     }
 
-    private void shrinkArray(int halfSize) {
+    public void shrinkArray(int halfSize) {
         //1. Create a new array with half size
         T[] newItems = (T[]) new Object[halfSize];
         //2. See if every element in old array is contiguous
         int head = nextFirst + 1;
         int headToTheEnd = items.length - head;
-        if (headToTheEnd < size) { //The elements are not contiguous, some elements are at the beginning part of items[]!
+        if (size <= headToTheEnd) {//ALL elements are contiguous!
+            System.arraycopy(items, head, newItems, 1, size);
+        } else {//The elements are not contiguous, some elements are at the beginning part of items[]!
             System.arraycopy(items, head, newItems, 1, headToTheEnd);
             System.arraycopy(items, 0, newItems, 1 + headToTheEnd, size - headToTheEnd);
-        } else { //headToTheEnd >= size, which means ALL elements are contiguous!
-            System.arraycopy(items, head, newItems, 1, size);
         }
         //3. Re-assign the nextFirst and nextLast
         nextFirst = 0;
@@ -184,3 +215,15 @@ public class ArrayDeque<T> {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+

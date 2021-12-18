@@ -1,0 +1,185 @@
+ArrayDeque
+↑↓←→↖↗↙↘↕
+Resizing methods include two methods: extending and shrinking
+#======================================================================================================#
+I. extendArray() - it is triggered if(size == items.length) in addFirst() or addLast()
+
+   1. Two arraycopy to copy everything from items to newItems
+
+      #======================⚠️Situation #1: (when nextFirst + 1 = 0 AND items[] is full)⚠️=========================#
+      items[] is below:
+
+    nextFirst ↘      ↓ Head                   Tail ↓      ↙ nextLast
+      index: (-1)    0     1     2     3     4     5    (6)
+      Elem:          1     3     5     7     9     11
+     |-----------------------after creating a newItems[] that has 2 times more length--------------------------------|
+      newItems[] is below:
+
+      index: (-1)    0     1     2     3     4     5     6     7     8     9     10    11     12
+      elem:          0     0     0     0     0     0     0     0     0     0     0     0      0
+
+     |-----------------------After arraycopy #1--------------------------------|
+      newItems[] is below:
+
+    nextFirst ↘      ↓ Head                   Tail ↓      ↙ nextLast
+      index: (-1)    0     1     2     3     4     5     6     7     8     9     10    11     12
+      elem:          1     3     5     7     9     11    0     0     0     0     0     0
+
+     |-----------------------After arraycopy #2--------------------------------|
+           newItems[] is below:
+
+    nextFirst ↘      ↓ Head                   Tail ↓      ↙ nextLast
+      index: (-1)    0     1     2     3     4     5     6     7     8     9     10    11     12
+      elem:          1     3     5     7     9     11    0     0     0     0     0     0
+
+      #======================⚠️Analysis of Situation #1⚠️========================================#
+      a. arraycopy #1 finishes all job since the head is at 0.
+
+      b. arraycopy #2 does not move since the moving steps is head, and head is 0.
+
+      c. items[] is full in Situation #1, nextFirst is at (-1), and nextLast is at (6)
+
+      d. Head and Tail are based on logical imagination rather than being two real instance variables.
+         For a better understanding, I create two local variables in extendArray():
+         1. int head (equals to nextFirst - 1)
+         2. int headToEnd (equals to items.length - head)
+
+      e. After two arraycopy:
+         1. Both items[] and newItems[] moves from the same head, so no need to re-assign nextFirst since it doesn't change.
+         2. In Situation #1, nextLast is not changed too, but I still need to re-assign it because nextLast will be changed in
+            Situation #2. I need a common pattern of code.
+
+      f. No need to re-assign head and tail since they are just tools(local variables) for a better understanding.
+         It is okay to create head and tail again in other method blocks.
+
+      #======================⚠️End of Situation #1⚠️========================================#
+
+      #======================⚠️Situation #2: (when nextFirst + 1 = nextLast AND items[] is full)⚠️=========================#
+      items[] is below:
+
+                            Tail ↓     ↓ Head
+      index: (-1)    0     1     2     3     4     5    (6)
+                      nextFirst ↗       ↖ nextLast
+      Elem:          7     9     11    1     3     5
+
+     |-----------------------after creating a newItems[] that has 2 times more length--------------------------------|
+      newItems[] is below:
+
+      index: (-1)    0     1     2     3     4     5     6     7     8     9     10    11     (12)
+      elem:          0     0     0     0     0     0     0     0     0     0     0     0
+
+     |-----------------------After arraycopy #1--------------------------------|
+      newItems[] is below:
+                                       ↓ Head (move forward)
+      index: (-1)    0     1     2     3     4     5     6     7     8     9     10    11     (12)
+
+      elem:          0     0     0     1     3     5     0     0     0     0     0     0
+
+     |-----------------------After arraycopy #2--------------------------------|
+           newItems[] is below:
+
+                                                         ↓ items.length (move forward)
+      index: (-1)    0     1     2     3     4     5     6     7     8     9     10    11     12
+      elem:          0     0     0     1     3     5     7     9     11    0     0     0
+
+      #======================⚠️Analysis of Situation #2⚠️========================================#
+      a. arraycopy #1 finishes first-part job - it moves from head position
+
+      b. arraycopy #2 finishes second-part job - it moves from items.length position (connect to the first part)
+
+      c. After two arraycopy:
+         1. Both items[] and newItems[] moves from the same head, so no need to re-assign nextFirst since it doesn't change.
+         2. In Situation #2, since nextLast is changed. I need to re-assign it as (head + items.length)
+
+      f. No need to re-assign head and tail since they are just tools(local variables) for a better understanding.
+         It is okay to create head and tail again in other method blocks.
+
+      #======================⚠️End of Situation #2⚠️========================================#
+
+
+#======================================================================================================#
+II. shrinkArray() - it is triggered if (size / items.length < 0.25) in removeFirst() or removeLast()
+
+    1. Two arraycopy to copy everything from items to newItems
+       R = size / items.length;
+       Halve the size of the array when R falls to less than 0.25.
+
+    2. Make a new array (with the half size of the old array)
+       T[] newItems = (T[]) new Object[halfSize]
+
+    3. See if every element in the old array is contiguous
+       ⚠️⚠️⚠️ Core thoughts:
+            int head = nextFirst + 1;
+            int headToTheEnd = items.length - head;
+            if (headToTheEnd < size) //The elements are not contiguous, some elements are at the beginning part of array!
+                arraycopy(items, head, newItems, 1, headToTheEnd);
+                arraycopy(items, 0, newItems, 1 + headToTheEnd, size - headToTheEnd);
+
+            else, (headToTheEnd >= size) //The elements are contiguous.
+                arraycopy(items, head, newItem, 1, size);
+
+            #==============================================================================#
+             Case #1: 1. All elements are contiguous in the old array
+                      2. 3 elements in a 12-length array (it reaches the 0.25 factor) - it needs to be shorten/shrank)
+             items[]
+             index: 0     1     2     3     4     5     6     7     8     9     10    11
+                    0     0     0     0     0     2     4     6     0     0     0     0
+                                              Head|           |Tail
+                                   nextFirst|                       |nextLast
+
+           |-----------------After arraycopy(items, head, newItem, 1, size); --------------------------------------|
+            newItems[]
+            index: 0     1     2     3     4     5
+                   0     2     4     6     0     0
+                     Head|           |Tail
+                nextFirst|           |nextLast
+
+            #==============================================================================#
+             Case #2: 1. Elements are NOT contiguous in the old array
+                      2. Some elements are at the beginning part of array, some are at the end
+
+             index: 0     1     2     3     4     5     6     7     8     9     10    11
+                    6     0     0     0     0     0     0     0     0     0     2     4
+                Tail|                                                           |Head
+                  nextLast|                                               |nextFirst
+
+           |-----------------After arraycopy(items, head, newItems, 1, headToTheEnd);--------------------------------------|
+           |-----------------arraycopy(items, 0, newItems, 1 + headToTheEnd, size - headToTheEnd);--------------------------------------|
+            newItems[]
+            index: 0     1     2     3     4     5
+                   0     2     4     6     0     0
+                     Head|           |Tail
+                nextFirst|           |nextLast
+
+    4. ⚠️Re-assign the nextFirst and nextLast
+       nextFirst = 0; //since the head is always 1 in the newItems[]
+       nextLast = 1 + size;
+
+//NOTES for future: If I don't remember some details in the process above, make a nice picture and stickers. You will succeed, Allen Cai!
+
+
+
+4. Implement printDeque()
+
+
+
+5. Check everything that matches the requirement
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
