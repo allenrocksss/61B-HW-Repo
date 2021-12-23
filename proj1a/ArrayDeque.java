@@ -18,24 +18,24 @@ public class ArrayDeque<T> {
         nextLast = 1;
     }
 
-    /** Constructor#2: Make an element-alive array */
-    public ArrayDeque(T element) {
-        items = (T[]) new Object[6];
-        items[3] = element;
-        size = 1;
-        nextFirst = 0;
-        nextLast = 1;
-    }
-
-    /** Constructor#3: Make a DEEP copy of an existed array deque */
-    public ArrayDeque(ArrayDeque<T> AnArrayDeque) {
-        // Also, I can use arraycopy, but I use a for loop here :)
-        //1. Initialize the items[] and get the size from other array - AnArrayDeque
-        items = (T[]) new Object[AnArrayDeque.size];
-        System.arraycopy(AnArrayDeque.items, 0, items, 0, AnArrayDeque.items.length);
-        nextFirst = AnArrayDeque.nextFirst;
-        nextLast = AnArrayDeque.nextLast;
-    }
+//    /** Constructor#2: Make an element-alive array */
+//    public ArrayDeque(T element) {
+//        items = (T[]) new Object[6];
+//        items[3] = element;
+//        size = 1;
+//        nextFirst = 0;
+//        nextLast = 1;
+//    }
+//
+//    /** Constructor#3: Make a DEEP copy of an existed array deque */
+//    public ArrayDeque(ArrayDeque<T> AnArrayDeque) {
+//        // Also, I can use arraycopy, but I use a for loop here :)
+//        //1. Initialize the items[] and get the size from other array - AnArrayDeque
+//        items = (T[]) new Object[AnArrayDeque.size];
+//        System.arraycopy(AnArrayDeque.items, 0, items, 0, AnArrayDeque.items.length);
+//        nextFirst = AnArrayDeque.nextFirst;
+//        nextLast = AnArrayDeque.nextLast;
+//    }
 
     /** New added item will be the last item */
     public void addLast(T element) {
@@ -146,71 +146,100 @@ public class ArrayDeque<T> {
         return size;
     }
 
-    /** Return the item on the given index */
+    /** Return the item on the given index
+     * The index only works for the dynamic circular array (based on our
+     * logics, not the physical real array! */
     public T get(int index) {
-        return items[index];
+        //1. See if the index is out of bound (is more than the size)
+        if (!(index < size)) { //size should be > index
+           return null;
+        }
+        /* 2. if (Either the dynamic array is contiguous or the given index points to the rightmost part of array)
+        *        just return items[hi] */
+        int hi = getHead() + index;
+        if (isContiguous() || hi <= items.length - 1) {
+            return items[hi];
+        } else {
+            return items[hi - items.length];
+        }
     }
 
     /** Print each item from first to last */
     public void printDeque() {
-        //1. Tools
-        int head = nextFirst + 1;
-        int headToEnd = items.length - head;
-
-        if (headToEnd < size) { //If the array is NOT contiguous
-            /** Walk from head to the end */
-            for (int i = head; i < items.length; i++) {
+        //1. if the array is contiguous, one single walk is enough
+        if (isContiguous()) {
+            for (int i = getHead(); i < nextLast; i++) {
                 System.out.print(items[i] + " ");
             }
-            /** Walk from the start (0) to the tail */
+        } else {
+        //2. if the array is NOT contiguous, then we need two walks
+            for (int i = getHead(); i < items.length; i++) {
+                System.out.print(items[i] + " ");
+            }
             for (int i = 0; i < nextLast; i++) {
                 System.out.println(items[i] + " ");
-            }
-        } else { //else, the array is contiguous
-            for (int i = head; i < nextLast; i++) {
-                System.out.print(items[i] + " ");
             }
         }
     }
 
-    public void extendArray(int doubleSize) {
+    /** (Helper) Get the head */
+    private int getHead() {
+        //1. Find the head
+        int head = 0;
+        if (!(nextFirst == items.length - 1)) {
+            head = nextFirst + 1;
+        }
+        return head;
+    }
+
+    /** (Helper) See if the array is contiguous or not
+     * The core approach is about size and headToEnd
+     * if size <= headToEnd, then the array is contiguous, vice versa */
+    private boolean isContiguous() {
+        //2. Calculate the headToEnd
+        int headToEnd = items.length - getHead();
+        //3. if true, it is contiguous
+        if (size > headToEnd) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private void extendArray(int doubleSize) {
         //1. Make a new array that has double size of old array
         T[] newItems = (T[]) new Object[doubleSize];
-        //2. Identify the head (No need to identify the tail)
-        int head = nextFirst + 1;
-        //3. Specify how many steps we need to walk from the 'head' to the end
-        int headToEnd = items.length - head;
-        //4. Copy the first part - from the head to the end (headToEnd is how many steps to walk)
-        System.arraycopy(items, head, newItems, head, headToEnd);
-       /* 3. Copy the second part - from the start to the tail (head is how many steps to walk)
+        //2. Specify how many steps we need to walk from the 'head' to the end
+        int headToEnd = items.length - getHead();
+        //3. Copy the first part - from the head to the end (headToEnd is how many steps to walk)
+        System.arraycopy(items, getHead(), newItems, getHead(), headToEnd);
+       /* 4. Copy the second part - from the start to the tail (head is how many steps to walk)
              When items[] is full, if head is at the index 0, the first arraycopy has finished the job
              , and the second arraycopy will not even move forward since the steps is 'head', which is 0
          */
-        System.arraycopy(items, 0, newItems, items.length, head);
+        System.arraycopy(items, 0, newItems, items.length, getHead());
       /* 4. Reassign new nextLast - no need to do so on nextFirst since we use the same 'head' in
             items[] and newItems[], and 'nextFirst' is not changed at all. ONLY nextLast will be changed.
        */
-        nextLast = head + items.length;
+        nextLast = getHead() + items.length;
         //5. Abandon the old short array and use the new longer array
         items = newItems;
     }
 
-    public void shrinkArray(int halfSize) {
+    private void shrinkArray(int halfSize) {
         //1. Create a new array with half size
         T[] newItems = (T[]) new Object[halfSize];
-        //2. See if every element in old array is contiguous
-        int head = nextFirst + 1;
-        int headToTheEnd = items.length - head;
-        if (size <= headToTheEnd) {//ALL elements are contiguous!
-            System.arraycopy(items, head, newItems, 1, size);
+        int headToTheEnd = items.length - getHead();
+        if (isContiguous()) {//ALL elements are contiguous!
+            System.arraycopy(items, getHead(), newItems, 1, size);
         } else {//The elements are not contiguous, some elements are at the beginning part of items[]!
-            System.arraycopy(items, head, newItems, 1, headToTheEnd);
+            System.arraycopy(items, getHead(), newItems, 1, headToTheEnd);
             System.arraycopy(items, 0, newItems, 1 + headToTheEnd, size - headToTheEnd);
         }
-        //3. Re-assign the nextFirst and nextLast
+        //2. Re-assign the nextFirst and nextLast
         nextFirst = 0;
         nextLast = 1 + size;
-        //4. Abandon the old long array and use the new shorter array
+        //3. Abandon the old long array and use the new shorter array
         items = newItems;
     }
 

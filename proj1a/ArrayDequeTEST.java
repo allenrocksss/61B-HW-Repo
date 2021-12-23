@@ -55,7 +55,7 @@ public class ArrayDequeTEST {
          *      items[6] looks like: {      6,       4,     2,     0,     10,     8}
          *  newItems[12] looks like: {   null,    null,  null,    12, 10, 8, 6, 4, 2, 0}
          *
-         *  */
+         *
         for (int i = 0; i < 6; i++) {
             arrayDequeOne.addFirst(i * 2);
         }
@@ -79,7 +79,7 @@ public class ArrayDequeTEST {
         }
         for (int i = 0; i < 6; i++) {
             arrayDequeOne.addFirst(i * 2);
-        }
+        } */
 
         /** Test 5: removeLast()
          * Following to the Test 4, we have an arrayDeque of 48 elements
@@ -97,12 +97,20 @@ public class ArrayDequeTEST {
 
         /** Test 7: printDeque()
          * Following to the Test 4, we have an arrayDeque of 48 elements
-         */
-        arrayDequeOne.printDeque();
 
+        arrayDequeOne.printDeque();*/
 
+        arrayDequeOne.addLast(0);
+        System.out.println(arrayDequeOne.removeFirst());
 
-
+        arrayDequeOne.addFirst(2);
+        arrayDequeOne.addFirst(3);
+        arrayDequeOne.addLast(4);
+        arrayDequeOne.addLast(5);
+        System.out.println(arrayDequeOne.removeLast());
+        System.out.println(arrayDequeOne.removeFirst());
+        arrayDequeOne.addFirst(8);
+        arrayDequeOne.addFirst(9);
 
 
 

@@ -30,7 +30,6 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
-
     /** New added item will be the first item in the deque */
     public void addFirst(T item) {
         /**If the deque is empty, the new added item's prevOne will be sentinel, its nextOne will be sentinel too
@@ -139,23 +138,11 @@ public class LinkedListDeque<T> {
     /** Helper method
      * It is private
      * It is a static method */
-    public T getRecursive(StuffNode x, int i) {
+    private T getRecursive(StuffNode x, int i) {
         if (i == 0) {
             return x.theItem;
         }
         return getRecursive(x.nextOne, i - 1);
-    }
-
-    public static void main(String[] args) {
-        LinkedListDeque<Integer> L = new LinkedListDeque<>();
-        L.addFirst(0);
-        L.addFirst(1);
-        L.addFirst(2); //{2, 1, 0}
-//        L.removeFirst();    //{1, 0}
-        System.out.println(L.removeFirst());
-//        System.out.println(L.get(0));
-//        System.out.println(L.get(1));
-
     }
 
 }
