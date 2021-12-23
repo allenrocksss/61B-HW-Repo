@@ -186,10 +186,10 @@ public class ArrayDeque<T> {
     private int getHead() {
         //1. Find the head
         int head = 0;
-        if (!(nextFirst == items.length - 1)) {
-            head = nextFirst + 1;
+        if (nextFirst != items.length - 1) {
+            head = nextFirst + 1; //Normally we go this way her
         }
-        return head;
+        return head; //Special situation
     }
 
     /** (Helper) See if the array is contiguous or not
@@ -221,6 +221,7 @@ public class ArrayDeque<T> {
       /* 4. Reassign new nextLast - no need to do so on nextFirst since we use the same 'head' in
             items[] and newItems[], and 'nextFirst' is not changed at all. ONLY nextLast will be changed.
        */
+        nextFirst = getHead() - 1;
         nextLast = getHead() + items.length;
         //5. Abandon the old short array and use the new longer array
         items = newItems;

@@ -100,17 +100,24 @@ public class ArrayDequeTEST {
 
         arrayDequeOne.printDeque();*/
 
-        arrayDequeOne.addLast(0);
-        System.out.println(arrayDequeOne.removeFirst());
 
-        arrayDequeOne.addFirst(2);
-        arrayDequeOne.addFirst(3);
-        arrayDequeOne.addLast(4);
-        arrayDequeOne.addLast(5);
-        System.out.println(arrayDequeOne.removeLast());
-        System.out.println(arrayDequeOne.removeFirst());
-        arrayDequeOne.addFirst(8);
+
+        arrayDequeOne.addFirst(0);
+        arrayDequeOne.removeLast(); //--> 0
+        arrayDequeOne.addLast(2);
+        arrayDequeOne.addLast(3);
+        arrayDequeOne.addFirst(4);
+        arrayDequeOne.removeLast(); //--> 3
+        arrayDequeOne.addFirst(6);
+        arrayDequeOne.removeFirst(); //--> 6
+        arrayDequeOne.addLast(8);
         arrayDequeOne.addFirst(9);
+        arrayDequeOne.removeFirst(); //--> 9
+        arrayDequeOne.addLast(11);
+        arrayDequeOne.removeFirst(); //--> 11
+
+
+
 
 
 

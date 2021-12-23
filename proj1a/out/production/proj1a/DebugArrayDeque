@@ -32,7 +32,11 @@ After I running my simpleTest, I found a couple of mistakes:
        steps are executed, which cause the
        duplicated removing actions
 
-5.
+5. I did not update the 'nextFirst' after doing extendArray
+   Even if I use the same 'head' in both of new and old array,
+   but sometimes the 'nextFirst' could be at the position of
+   "items.length - 1". Thus, I need to update both of
+   'nextFirst' and 'nextLast'.
 
 
 
